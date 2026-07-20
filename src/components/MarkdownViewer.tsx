@@ -10,7 +10,7 @@ interface MarkdownViewerProps {
 
 export default function MarkdownViewer({ content }: MarkdownViewerProps) {
   return (
-    <div className="text-zinc-800 dark:text-zinc-200 leading-relaxed text-[15px]">
+    <div className="text-zinc-800 dark:text-zinc-200 leading-relaxed text-[15px] whitespace-pre-wrap">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -24,8 +24,8 @@ export default function MarkdownViewer({ content }: MarkdownViewerProps) {
             <h3 className="text-lg font-semibold mt-4 mb-2 text-zinc-900 dark:text-zinc-50" {...props} />
           ),
           p: ({ ...props }) => <p className="mb-4 last:mb-0" {...props} />,
-          ul: ({ ...props }) => <ul className="list-disc pl-5 mb-4 space-y-1.5" {...props} />,
-          ol: ({ ...props }) => <ol className="list-decimal pl-5 mb-4 space-y-1.5" {...props} />,
+          ul: ({ ...props }) => <ul className="list-disc pl-5 mb-4 space-y-1.5" style={{ listStyleType: 'disc' }} {...props} />,
+          ol: ({ ...props }) => <ol className="list-decimal pl-5 mb-4 space-y-1.5" style={{ listStyleType: 'decimal' }} {...props} />,
           li: ({ ...props }) => <li className="mb-0.5" {...props} />,
           blockquote: ({ ...props }) => (
             <blockquote className="border-l-4 border-amber-500 pl-4 italic my-4 text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/40 py-2 pr-3 rounded-r-md" {...props} />

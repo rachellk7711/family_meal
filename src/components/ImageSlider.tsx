@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ImageSliderProps {
@@ -33,13 +32,10 @@ export default function ImageSlider({ images }: ImageSliderProps) {
     <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] group overflow-hidden rounded-2xl bg-zinc-950 shadow-md border border-zinc-200/20 dark:border-zinc-800/20">
       {/* 이미지 렌더링 */}
       <div className="w-full h-full relative">
-        <Image
+        <img
           src={images[currentIndex].image_url}
           alt={`식사 아카이브 이미지 ${currentIndex + 1}`}
-          fill
-          priority
-          sizes="(max-w-768px) 100vw, 800px"
-          className="object-cover transition-opacity duration-500 ease-in-out"
+          className="w-full h-full object-cover transition-opacity duration-500 ease-in-out"
         />
       </div>
 
