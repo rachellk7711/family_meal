@@ -1,0 +1,36 @@
+# 진행할 체크리스트 (To-Do List)
+
+- [x] **1단계: Next.js 프로젝트 생성 및 기본 구조 설정**
+    - [x] `create-next-app`을 활용해 TypeScript, Tailwind CSS v4, App Router 기반 프로젝트 초기 생성
+    - [x] 불필요한 기본 템플릿 코드 정리 (`src/app/page.tsx` 등)
+    - [x] Tailwind CSS v4 디자인 시스템 토큰 기본 확인 및 `globals.css` 확인
+- [x] **2단계: 의존성 라이브러리 설치**
+    - [x] `@supabase/supabase-js` 설치 (Supabase 통신용)
+    - [x] `browser-image-compression` 설치 (클라이언트 이미지 압축용)
+    - [x] `react-markdown`, `remark-gfm` 설치 (마크다운 뷰어용)
+    - [x] `lucide-react` 설치 (세련된 아이콘 제공용)
+- [x] **3단계: Supabase 아키텍처 구축 및 스키마 적용**
+    - [x] `menus` 테이블에 `link`, `memo` 컬럼이 추가된 데이터베이스 테이블 생성 SQL 작성 및 적용
+    - [x] Supabase Storage `meal-images` 버킷 생성 가이드 작성 및 RLS 정책(Public Read / Auth Write) 설정
+    - [x] `.env.local` 환경 변수 구성 및 `src/lib/supabase.ts` 클라이언트 초기화 코드 작성
+- [x] **4단계: 이미지 압축 및 업로드 유틸리티 개발**
+    - [x] `browser-image-compression`을 활용하여 1MB 이하로 이미지를 압축하는 모듈 작성
+    - [x] 압축된 이미지를 Supabase Storage에 업로드하고 Public URL을 반환하는 유틸리티 구현 (`src/lib/image.ts`)
+- [x] **5단계: 데이터 레이어 및 CRUD API 개발**
+    - [x] 메뉴 등록/수정/삭제 함수 작성 (신규 `link`, `memo` 필드 대응)
+    - [x] 태그 목록 가져오기 및 태그 추가/삭제 함수 작성
+    - [x] 메뉴 목록 조회 (태그 필터링 및 Masonry 페이징 지원용) 함수 작성
+- [x] **6단계: 공통 컴포넌트 개발**
+    - [x] 핀터레스트 스타일 구현을 위한 Masonry Grid 레이아웃 컴포넌트 (`src/components/MasonryGrid.tsx`)
+    - [x] 개별 메뉴 카드 컴포넌트 (`src/components/MenuCard.tsx`)
+    - [x] 이미지 업로드 및 슬라이더 컴포넌트 (`src/components/ImageSlider.tsx`)
+    - [x] 마크다운 파서 및 뷰어 컴포넌트 (`src/components/MarkdownViewer.tsx`)
+    - [x] 태그 관리 컴포넌트 (상황 태그, 식재료 태그 자유 추가/삭제)
+- [x] **7단계: 페이지 및 라우팅 구현**
+    - [x] 메인 페이지 (`src/app/page.tsx`): Masonry Grid + 태그 필터
+    - [x] 글쓰기 페이지 (`src/app/menu/new/page.tsx`): 메뉴 등록 폼 (제목, 링크, 메모, AI 마크다운 복붙 영역, 이미지 드래그앤드롭 업로더, 태그 입력기 포함)
+    - [x] 상세 페이지 (`src/app/menu/[id]/page.tsx`): 사진 슬라이더 + 태그 목록 + 메모/링크 노출 + AI 마크다운 레시피 뷰어 + 삭제/수정 기능
+- [x] **8단계: UI/UX 디테일 및 디자인 시스템 폴리싱**
+    - [x] 슬라이더 모션 및 카드 호버 시 프리미엄 마이크로 인터랙션 추가
+    - [x] 모바일/태블릿/데스크톱 반응형 그리드 완벽 대응
+    - [x] 전체 빌드 및 ESLint 린트 에러 검증
