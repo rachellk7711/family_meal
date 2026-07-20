@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Image as ImageIcon, Loader2, X, PlusCircle, Link as LinkIcon, FileText } from 'lucide-react';
+import { ArrowLeft, Image as ImageIcon, Loader2, X, PlusCircle, Link as LinkIcon, FileText, Camera } from 'lucide-react';
 import Link from 'next/link';
 import { uploadMealImage } from '@/lib/image';
 import { createMenu } from '@/lib/api';
@@ -138,28 +138,43 @@ export default function NewMenuPage() {
               <ImageIcon size={16} /> 요리 사진 등록
             </h2>
             
-            <div
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              className="border-2 border-dashed border-zinc-200 dark:border-zinc-850 hover:border-amber-500/50 dark:hover:border-amber-500/50 rounded-xl p-8 text-center transition-colors relative cursor-pointer group"
-            >
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleImageChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <ImageIcon size={22} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* 앨범 선택 및 드래그 */}
+              <div
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 dark:hover:border-amber-500/50 rounded-xl p-6 text-center transition-colors relative cursor-pointer group flex flex-col items-center justify-center min-h-[140px]"
+              >
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                  <ImageIcon size={18} />
                 </div>
-                <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300 mt-1">
-                  여기에 요리 사진 드래그하거나 클릭하여 추가
-                </p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-500">
-                  PNG, JPG, WEBP 지원 (Storage 저장 전 브라우저에서 자동 압축됨)
-                </p>
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">앨범에서 요리 사진 선택</span>
+                <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">또는 사진 드래그 앤 드롭</span>
+              </div>
+
+              {/* 모바일 카메라 촬영 */}
+              <div
+                className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 dark:hover:border-orange-500/50 rounded-xl p-6 text-center transition-colors relative cursor-pointer group flex flex-col items-center justify-center min-h-[140px]"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleImageChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="w-10 h-10 rounded-full bg-orange-50 dark:bg-orange-950/20 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                  <Camera size={18} />
+                </div>
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">카메라로 요리 즉시 촬영</span>
+                <span className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">모바일 카메라 다이렉트 호출</span>
               </div>
             </div>
 

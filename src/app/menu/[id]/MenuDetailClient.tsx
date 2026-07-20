@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Edit2, Trash2, Calendar, Link as LinkIcon, FileText, Check, X, ImageIcon, Loader2 } from 'lucide-react';
+import { ArrowLeft, Edit2, Trash2, Calendar, Link as LinkIcon, FileText, Check, X, ImageIcon, Loader2, Camera } from 'lucide-react';
 import Link from 'next/link';
 import { Menu, TagType } from '@/lib/types';
 import { deleteMenu, updateMenu } from '@/lib/api';
@@ -272,19 +272,35 @@ export default function MenuDetailClient({ initialMenu }: MenuDetailClientProps)
               )}
 
               {/* 새 이미지 드래그앤드롭/파일선택 */}
-              <div className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 rounded-xl p-6 text-center transition-colors relative cursor-pointer group">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleNewImageChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                />
-                <div className="flex flex-col items-center gap-1.5">
-                  <div className="text-amber-500">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {/* 앨범에서 선택 */}
+                <div className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 rounded-xl p-4.5 text-center transition-colors relative cursor-pointer group flex flex-col items-center justify-center min-h-[110px]">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleNewImageChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="text-amber-500 mb-1 group-hover:scale-110 transition-transform">
                     <ImageIcon size={18} />
                   </div>
-                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">새로운 요리 사진 추가</span>
+                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">앨범에서 요리 사진 추가</span>
+                </div>
+
+                {/* 카메라 촬영 */}
+                <div className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 rounded-xl p-4.5 text-center transition-colors relative cursor-pointer group flex flex-col items-center justify-center min-h-[110px]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleNewImageChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="text-orange-500 mb-1 group-hover:scale-110 transition-transform">
+                    <Camera size={18} />
+                  </div>
+                  <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">카메라로 즉시 촬영 추가</span>
                 </div>
               </div>
 
