@@ -9,6 +9,7 @@ import { deleteMenu, updateMenu } from '@/lib/api';
 import { uploadMealImage } from '@/lib/image';
 import ImageSlider from '@/components/ImageSlider';
 import MarkdownViewer from '@/components/MarkdownViewer';
+import ImageCropperModal from '@/components/ImageCropperModal';
 import TagInput from '@/components/TagInput';
 
 interface MenuDetailClientProps {
@@ -40,6 +41,9 @@ export default function MenuDetailClient({ initialMenu }: MenuDetailClientProps)
     menu.menu_images?.map((img) => img.image_url) || []
   );
 
+  // 크롭 큐 상태
+  const [cropQueue, setCropQueue] = useState<File[]>([]);
+
   const [uploadProgress, setUploadProgress] = useState('');
 
   // 삭제 핸들러
@@ -63,11 +67,22 @@ export default function MenuDetailClient({ initialMenu }: MenuDetailClientProps)
   const handleNewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
-      setNewImageFiles((prev) => [...prev, ...filesArray]);
-
-      const newPreviews = filesArray.map((file) => URL.createObjectURL(file));
-      setTempPreviewUrls((prev) => [...prev, ...newPreviews]);
+      // 다이렉트로 추가하지 않고 크롭 큐에 적재
+      setCropQueue((prev) => [...prev, ...filesArray]);
     }
+  };
+
+  // 크롭 완료 시 실행
+  const handleCropComplete = (croppedFile: File) => {
+    setNewImageFiles((prev) => [...prev, croppedFile]);
+    const previewUrl = URL.createObjectURL(croppedFile);
+    setTempPreviewUrls((prev) => [...prev, previewUrl]);
+    setCropQueue((prev) => prev.slice(1));
+  };
+
+  // 크롭 취소 시 실행
+  const handleCropCancel = () => {
+    setCropQueue((prev) => prev.slice(1));
   };
 
   // 임시 선택 이미지 제거
@@ -462,6 +477,15 @@ export default function MenuDetailClient({ initialMenu }: MenuDetailClientProps)
           </div>
         )}
       </main>
+
+      {/* 크롭 편집기 모달 */}
+      {cropQueue.length > 0 && (
+        <ImageCropperModal
+          file={cropQueue[0]}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
     </div>
   );
 }

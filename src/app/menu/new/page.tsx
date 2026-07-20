@@ -8,6 +8,7 @@ import { uploadMealImage } from '@/lib/image';
 import { createMenu } from '@/lib/api';
 import { TagType } from '@/lib/types';
 import TagInput from '@/components/TagInput';
+import ImageCropperModal from '@/components/ImageCropperModal';
 
 export default function NewMenuPage() {
   const router = useRouter();
@@ -23,6 +24,9 @@ export default function NewMenuPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   
+  // 크롭 편집 큐
+  const [cropQueue, setCropQueue] = useState<File[]>([]);
+  
   // 로딩 상태
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
@@ -31,11 +35,8 @@ export default function NewMenuPage() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const filesArray = Array.from(e.target.files);
-      setSelectedFiles((prev) => [...prev, ...filesArray]);
-
-      // 미리보기 생성
-      const newPreviews = filesArray.map((file) => URL.createObjectURL(file));
-      setPreviewUrls((prev) => [...prev, ...newPreviews]);
+      // 다이렉트로 추가하지 않고 크롭 큐에 적재
+      setCropQueue((prev) => [...prev, ...filesArray]);
     }
   };
 
@@ -59,11 +60,24 @@ export default function NewMenuPage() {
       const filesArray = Array.from(e.dataTransfer.files).filter(file => 
         file.type.startsWith('image/')
       );
-      setSelectedFiles((prev) => [...prev, ...filesArray]);
-
-      const newPreviews = filesArray.map((file) => URL.createObjectURL(file));
-      setPreviewUrls((prev) => [...prev, ...newPreviews]);
+      // 다이렉트로 추가하지 않고 크롭 큐에 적재
+      setCropQueue((prev) => [...prev, ...filesArray]);
     }
+  };
+
+  // 크롭이 성공적으로 완료되었을 때 실행
+  const handleCropComplete = (croppedFile: File) => {
+    setSelectedFiles((prev) => [...prev, croppedFile]);
+    const previewUrl = URL.createObjectURL(croppedFile);
+    setPreviewUrls((prev) => [...prev, previewUrl]);
+    // 큐에서 작업 끝난 첫 번째 파일 제외
+    setCropQueue((prev) => prev.slice(1));
+  };
+
+  // 크롭 창에서 취소했을 때 실행
+  const handleCropCancel = () => {
+    // 그냥 큐에서 빼고 넘어감
+    setCropQueue((prev) => prev.slice(1));
   };
 
   // 데이터 제출
@@ -300,6 +314,15 @@ export default function NewMenuPage() {
 
         </form>
       </main>
+
+      {/* 크롭 편집기 모달 */}
+      {cropQueue.length > 0 && (
+        <ImageCropperModal
+          file={cropQueue[0]}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
     </div>
   );
 }
